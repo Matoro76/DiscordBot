@@ -2,7 +2,8 @@ const now = new Date();
 const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
 const msUntilMidnight = midnight.getTime() - now.getTime();
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const { notifyChannelId } = require('./config.json');
+const { notifyChannelId, dailyNotifyGroupId } = require('./config.json');
+const { tasks } = require('./dailyNotifyTasks');
 
 /**
  * @param {import ('discord.js').Client} client
@@ -14,7 +15,7 @@ async function sendMessage(client) {
         console.error('未找到通知頻道');
         return;
     }
-    await channel.send('@here 跨日了', { allowedMentions: { parse: ['users', 'roles', 'everyone'] } });
+    await channel.send(`<@&${dailyNotifyGroupId}> \n跨日了 記得處理` + genDailyNotifyMessage(), { allowedMentions: { parse: ['users', 'roles', 'everyone'] } });
     // 這裡應該可以新增跨日要處理的事情detail
     // 以DB記錄，並透過web或bot更新
 }
@@ -29,6 +30,14 @@ async function dailyNotify(client) {
             await sendMessage(client);
         }, MS_PER_DAY);
     }, msUntilMidnight);
+}
+
+function genDailyNotifyMessage() {
+    let dailyNotifyMessage = '';
+    tasks.forEach((task, index) => {
+        dailyNotifyMessage += `\n${index + 1}. ${task}`;
+    });
+    return dailyNotifyMessage;
 }
 
 module.exports = dailyNotify;
