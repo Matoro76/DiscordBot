@@ -5,7 +5,7 @@ const { token, clientID, guildID } = require('./config.json');
 const commands = [
     {
         name: 'ping',
-        description: 'Replies with Pong!',
+        description: '得知機器人的延遲資訊',
     },
 ];
 

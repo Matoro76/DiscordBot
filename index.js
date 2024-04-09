@@ -1,8 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const client = new Client({
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
+});
 const { token } = require('./config.json');
+const setStatus = require('./status');
+const dailyNotify = require('./notify');
 
 client.commands = new Collection();
 
@@ -17,10 +21,11 @@ for (const file of commandFiles) {
 }
 
 client.on('ready', () => {
-	client.user.setStatus('online');
-	client.user.setActivity('指令機器人', { type: ActivityType.Playing });
+	setStatus(client);
+	dailyNotify(client);
 });
 
+// execute slash commands
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
