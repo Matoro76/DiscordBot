@@ -4,7 +4,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
 });
-const { token } = require('./config.json');
+const { token } = require('./config');
 const setStatus = require('./status');
 const dailyNotify = require('./notify');
 
