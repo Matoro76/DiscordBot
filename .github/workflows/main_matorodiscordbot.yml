@@ -22,6 +22,12 @@ jobs:
           node-version: '20.x'
 
       - name: npm install, deploy and build
+        env:
+          TOKEN: ${{secrets.TOKEN}}
+          CLIENTID: ${{secrets.CLIENTID}}
+          GUILDID: ${{secrets.GUILDID}}
+          NOTIFYCHANNELID: ${{secrets.NOTIFYCHANNELID}}
+          DAILYNOTIFYGROUPID: ${{secrets.DAILYNOTIFYGROUPID}}
         run: |
           npm install
           npm run deploy
