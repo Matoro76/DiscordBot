@@ -23,6 +23,7 @@ jobs:
 
       - name: npm install, deploy and build
         env:
+          NODE_ENV: production        
           TOKEN: ${{secrets.TOKEN}}
           CLIENTID: ${{secrets.CLIENTID}}
           GUILDID: ${{secrets.GUILDID}}
