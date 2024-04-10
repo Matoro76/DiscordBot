@@ -2,7 +2,7 @@ const now = new Date();
 const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
 const msUntilMidnight = midnight.getTime() - now.getTime();
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const { notifyChannelId, dailyNotifyGroupId } = require('./config.json');
+const { notifyChannelId, dailyNotifyGroupId } = require('./config');
 const { tasks } = require('./dailyNotifyTasks');
 
 /**
