@@ -7,6 +7,9 @@ const client = new Client({
 const { token } = require('./config');
 const setStatus = require('./status');
 const dailyNotify = require('./notify');
+const express = require('express');
+const app = express();
+
 
 client.commands = new Collection();
 
@@ -23,6 +26,15 @@ for (const file of commandFiles) {
 client.on('ready', () => {
 	setStatus(client);
 	dailyNotify(client);
+});
+
+app.get('/ping', (req, res) => {
+	res.send('pong');
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+	console.log(`Express server running on port ${PORT}`);
 });
 
 // execute slash commands
