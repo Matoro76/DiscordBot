@@ -1,6 +1,5 @@
 const moment = require('moment-timezone');
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const { notifyChannelId, dailyNotifyGroupId } = require('./config');
 const { tasks } = require('./dailyNotifyTasks');
 
 function calculateTimeoutTillMidnightUTC8() {
@@ -14,12 +13,22 @@ function calculateTimeoutTillMidnightUTC8() {
  * @returns
  */
 async function sendMessage(client) {
-    const channel = client.channels.cache.get(notifyChannelId);
+    const channelName = ['通知', 'notify'];
+    const roleName = '每日通知';
+    const channel = client.channels.cache.find(ch => channelName.includes(ch.name) && ch.type === 'GUILD_TEXT');
     if (!channel) {
         console.error('未找到通知頻道');
         return;
     }
-    await channel.send(`<@&${dailyNotifyGroupId}> \n跨日了 記得處理` + genDailyNotifyMessage(), { allowedMentions: { parse: ['users', 'roles', 'everyone'] } });
+
+    const notifyRole = channel.guild.roles.cache.find(role => role.name === roleName);
+
+    if (!notifyRole) {
+        console.error('未找到指定的角色：每日通知');
+        return;
+    }
+
+    await channel.send(`<@&${notifyRole.id}> \n跨日了 記得處理` + genDailyNotifyMessage(), { allowedMentions: { parse: ['users', 'roles', 'everyone'] } });
     // 這裡應該可以新增跨日要處理的事情detail
     // 以DB記錄，並透過web或bot更新
 }

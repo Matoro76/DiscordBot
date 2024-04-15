@@ -1,6 +1,6 @@
 const { token } = require('./config');
 const setStatus = require('./status');
-const dailyNotify = require('./notify');
+const dailyNotify = require('./dailyNotify');
 const { refreshCommands } = require('./deploy');
 // eslint-disable-next-line no-unused-vars
 const app = require('./app');
