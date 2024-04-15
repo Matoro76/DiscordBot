@@ -1,9 +1,13 @@
-const now = new Date();
-const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-const msUntilMidnight = midnight.getTime() - now.getTime();
+const moment = require('moment-timezone');
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const { notifyChannelId, dailyNotifyGroupId } = require('./config');
 const { tasks } = require('./dailyNotifyTasks');
+
+function calculateTimeoutTillMidnightUTC8() {
+    const now = moment().tz('Asia/Taipei');
+    const midnightUTC8 = now.clone().endOf('day').add(1, 'second');
+    return midnightUTC8.diff(now);
+}
 
 /**
  * @param {import ('discord.js').Client} client
@@ -29,7 +33,7 @@ async function dailyNotify(client) {
         setInterval(async () => {
             await sendMessage(client);
         }, MS_PER_DAY);
-    }, msUntilMidnight);
+    }, calculateTimeoutTillMidnightUTC8());
 }
 
 function genDailyNotifyMessage() {
