@@ -11,7 +11,7 @@ const commands = [
 
 const rest = new REST({ version: '10' }).setToken(token);
 
-(async () => {
+async function refreshCommands() {
     try {
         console.log('Started refreshing application (/) commands.');
 
@@ -19,6 +19,8 @@ const rest = new REST({ version: '10' }).setToken(token);
 
         console.log('Successfully reloaded application (/) commands.');
     } catch (error) {
-        console.error(error);
+        console.error('Failed to refresh commands:', error);
     }
-})();
+}
+
+module.exports = { refreshCommands };
