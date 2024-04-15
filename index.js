@@ -10,7 +10,7 @@ const client = require('./client');
 client.on('ready', async () => {
 	setStatus(client);
 	dailyNotify(client);
-	await refreshCommands();
+	await refreshCommands(client);
 });
 
 // execute slash commands

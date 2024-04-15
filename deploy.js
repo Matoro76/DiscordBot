@@ -1,6 +1,6 @@
 const { REST, Routes } = require('discord.js');
 
-const { token, clientID, guildID } = require('./config');
+const { token } = require('./config');
 
 const commands = [
     {
@@ -11,13 +11,19 @@ const commands = [
 
 const rest = new REST({ version: '10' }).setToken(token);
 
-async function refreshCommands() {
+/**
+ * @param {import ('discord.js').Client} client
+ */
+async function refreshCommands(client) {
     try {
         console.log('Started refreshing application (/) commands.');
-
-        await rest.put(Routes.applicationGuildCommands(clientID, guildID), { body: commands });
-
-        console.log('Successfully reloaded application (/) commands.');
+        const guilds = client.guilds.cache.map(guild => guild);
+        for (const guild of guilds) {
+            await rest.put(
+                Routes.applicationGuildCommands(client.user.id, guild.id),
+                { body: commands },
+            );
+        }
     } catch (error) {
         console.error('Failed to refresh commands:', error);
     }
