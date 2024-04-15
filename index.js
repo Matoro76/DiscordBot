@@ -1,40 +1,16 @@
-const fs = require('fs');
-const path = require('path');
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const client = new Client({
-	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
-});
 const { token } = require('./config');
 const setStatus = require('./status');
-const dailyNotify = require('./notify');
-const express = require('express');
-const app = express();
+const dailyNotify = require('./dailyNotify');
+const { refreshCommands } = require('./deploy');
+// eslint-disable-next-line no-unused-vars
+const app = require('./app');
 
+const client = require('./client');
 
-client.commands = new Collection();
-
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-
-for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	// 將命令添加到集合中，以命令名為鍵
-	client.commands.set(command.name, command);
-}
-
-client.on('ready', () => {
+client.on('ready', async () => {
 	setStatus(client);
 	dailyNotify(client);
-});
-
-app.get('/ping', (req, res) => {
-	res.send('pong');
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-	console.log(`Express server running on port ${PORT}`);
+	await refreshCommands(client);
 });
 
 // execute slash commands
