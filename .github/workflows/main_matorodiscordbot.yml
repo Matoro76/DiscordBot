@@ -23,7 +23,7 @@ jobs:
 
       - name: npm install, deploy and build
         env:
-          NODE_ENV: production        
+          NODE_ENV: production
           TOKEN: ${{secrets.TOKEN}}
         run: |
           npm install
@@ -54,7 +54,7 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-      
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -69,4 +69,3 @@ jobs:
           app-name: 'MatoroDiscordBot'
           slot-name: 'Production'
           package: .
-          

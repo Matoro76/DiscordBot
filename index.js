@@ -8,25 +8,30 @@ const app = require('./app');
 const client = require('./client');
 
 client.on('ready', async () => {
-	setStatus(client);
-	dailyNotify(client);
-	await refreshCommands(client);
+  setStatus(client);
+  dailyNotify();
+  await refreshCommands(client);
 });
 
 // execute slash commands
 client.on('interactionCreate', async interaction => {
-	if (!interaction.isChatInputCommand()) return;
+  if (!interaction.isChatInputCommand()) return;
 
-	const command = client.commands.get(interaction.commandName);
+  const command = client.commands.get(interaction.commandName);
 
-	if (!command) return;
+  if (!command) return;
 
-	try {
-		await command.execute(interaction);
-	} catch (error) {
-		console.error(error);
-		await interaction.reply({ content: '執行命令時出現錯誤！', ephemeral: true });
-	}
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    await interaction.reply({
+      content: '執行命令時出現錯誤！',
+      ephemeral: true,
+    });
+  }
 });
 
 client.login(token);
+
+module.exports = client;
