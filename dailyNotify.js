@@ -1,32 +1,12 @@
-const moment = require('moment-timezone');
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const { tasks } = require('./dailyNotifyTasks');
 const common = require('./common');
-const channelName = ['通知', 'notify'];
+const channelName = ['notify'];
 const roleName = '每日通知';
+const cron = require('node-cron');
 
-function calculateTimeoutTillMidnightUTC8() {
-  const now = moment().tz('Asia/Taipei');
-  const midnightUTC8 = now.clone().endOf('day').add(1, 'second');
-  return midnightUTC8.diff(now);
-}
-
-/**
- * @param {import ('discord.js').Client} client
- * @returns
- */
-async function sendMessage() {
-  const channel = common.findTextChannelByChannelName(channelName);
-  if (!channel) {
-    return;
-  }
-
-  const notifyRole = common.findRoleByRoleName(roleName);
-
-  if (!notifyRole) {
-    return;
-  }
-
+async function sendMessage(client) {
+  const channel = common.findTextChannelByChannelName(client, channelName);
+  const notifyRole = common.findRoleByRoleName(client, roleName);
   await channel.send(
     `<@&${notifyRole.id}> \n跨日了 記得處理` + genDailyNotifyMessage(),
     { allowedMentions: { parse: ['users', 'roles', 'everyone'] } }
@@ -35,13 +15,19 @@ async function sendMessage() {
   // 以DB記錄，並透過web或bot更新
 }
 
-async function dailyNotify() {
-  setTimeout(() => {
-    sendMessage();
-    setInterval(async () => {
-      await sendMessage();
-    }, MS_PER_DAY);
-  }, calculateTimeoutTillMidnightUTC8());
+async function dailyNotify(client) {
+  const cronJob = cron.schedule(
+    '0 0 0 * * *',
+    () => {
+      sendMessage(client);
+    },
+    {
+      scheduled: false,
+      timezone: 'Asia/Taipei',
+    }
+  );
+  cronJob.start(client);
+  console.log('已設定開始執行cron job');
 }
 
 function genDailyNotifyMessage() {

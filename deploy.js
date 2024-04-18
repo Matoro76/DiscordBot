@@ -12,10 +12,9 @@ const commands = [
 const rest = new REST({ version: '10' }).setToken(token);
 
 /**
- * 更新機器人所有待的伺服器的指令
  * @param {import ('discord.js').Client} client
  */
-async function refreshCommandsOnEveryGuild(client) {
+async function refreshCommands(client) {
   try {
     console.log('Started refreshing application (/) commands.');
     const guilds = client.guilds.cache.map(guild => guild);
@@ -30,4 +29,4 @@ async function refreshCommandsOnEveryGuild(client) {
   }
 }
 
-module.exports = { refreshCommands: refreshCommandsOnEveryGuild };
+module.exports = { refreshCommands };

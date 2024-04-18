@@ -1,39 +1,45 @@
-const client = require('./index');
-const { guildId } = require('./config');
+const { guildId: GUILD_ID } = require('./config');
+
 /**
  * 透過可能的頻道名稱查找文字頻道，並返回第一個查詢結果
- * @param {Array} channelName
+ * @param {import ('discord.js').Client} client
+ * @param {Array} channelNames
  */
-function findTextChannelByChannelName(channelName) {
-  const channel = client.channels.cache.find(
-    ch => channelName.includes(ch.name) && ch.type === 'GUILD_TEXT'
-  );
-  if (!channel) {
-    for (const chName of channelName) {
-      console.error(`未找到${chName}頻道`);
+function findTextChannelByChannelName(client, channelNames) {
+  const guild = getGuildByGuildId(GUILD_ID, client);
+  if (guild) {
+    for (const ch of guild.channels.cache.values()) {
+      if (channelNames.includes(ch.name)) {
+        return ch;
+      }
     }
-    return;
   }
-  return channel;
+  return null;
 }
 
 /**
  * 透過可能的身分組名稱查找身分組，並返回第一個查詢結果
+ * @param {import ('discord.js').Client} client
  * @param {Array} roleName
  */
-function findRoleByRoleName(roleName) {
-  const guild = client.guilds.cache.get(guildId);
+function findRoleByRoleName(client, roleNames) {
+  const guild = getGuildByGuildId(GUILD_ID, client);
   if (guild) {
-    const role = guild.roles.cache.find(r => roleName.includes(r.name));
-    if (role) {
-      return role;
+    for (const role of guild.roles.cache.values()) {
+      if (roleNames.includes(role.name)) {
+        return role;
+      }
     }
   }
-  return;
+  return null;
 }
 
 async function sendMessage(channel, message) {
   await channel.send(message);
+}
+
+function getGuildByGuildId(client, guildId) {
+  return client.guilds.cache.get(guildId);
 }
 
 const common = {

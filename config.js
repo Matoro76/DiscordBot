@@ -3,7 +3,7 @@ let config;
 if (process.env.NODE_ENV === 'production') {
   config = {
     token: process.env.TOKEN,
-    guildId: process.env.GUILDID,
+    guildId: process.env.GUILD_ID,
   };
 } else {
   config = require('./config.json');

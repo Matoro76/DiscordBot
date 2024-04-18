@@ -9,7 +9,7 @@ const client = require('./client');
 
 client.on('ready', async () => {
   setStatus(client);
-  dailyNotify();
+  dailyNotify(client);
   await refreshCommands(client);
 });
 
