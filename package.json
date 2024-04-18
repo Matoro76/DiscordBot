@@ -32,6 +32,7 @@
     "tabWidth": 2,
     "useTabs": false,
     "bracketSpacing": true,
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "endOfLine": "auto"
   }
 }
