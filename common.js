@@ -1,4 +1,7 @@
 const { guildId: GUILD_ID } = require('./config');
+const logChannelName = 'log';
+const logChannel = findTextChannelByChannelName(logChannelName);
+const moment = require('moment-timezone');
 
 /**
  * 透過可能的頻道名稱查找文字頻道，並返回第一個查詢結果
@@ -42,10 +45,17 @@ function getGuildByGuildId(client, guildId) {
   return client.guilds.cache.get(guildId);
 }
 
+async function log(message) {
+  await logChannel.send(
+    `${moment().tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss')} : ${message}`
+  );
+}
+
 const common = {
   findTextChannelByChannelName,
   findRoleByRoleName,
   sendMessage,
+  log,
 };
 
 module.exports = common;
