@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "start": "node index.js",
     "deploy": "node deploy.js",
     "test": "mocha   --exit"
