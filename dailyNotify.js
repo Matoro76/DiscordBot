@@ -16,18 +16,31 @@ async function sendMessage(client) {
 }
 
 async function dailyNotify(client) {
-  const cronJob = cron.schedule(
+  cron.schedule(
     '0 0 0 * * *',
     () => {
       sendMessage(client);
     },
     {
-      scheduled: false,
+      scheduled: true,
       timezone: 'Asia/Taipei',
     }
   );
-  cronJob.start(client);
-  console.log('已設定開始執行cron job');
+  console.log('已設定開始執行daily cron job');
+}
+
+async function minuteNotify(client) {
+  cron.schedule(
+    '* * * * *',
+    () => {
+      sendMessage(client);
+    },
+    {
+      scheduled: true,
+      timezone: 'Asia/Taipei',
+    }
+  );
+  console.log('已設定開始執行minute cron job');
 }
 
 function genDailyNotifyMessage() {
@@ -38,4 +51,4 @@ function genDailyNotifyMessage() {
   return dailyNotifyMessage;
 }
 
-module.exports = dailyNotify;
+module.exports = { dailyNotify, minuteNotify };

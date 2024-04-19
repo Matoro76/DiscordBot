@@ -15,10 +15,6 @@
 				"after": true
 			}
 		],
-		"comma-dangle": [
-			"error",
-			"always-multiline"
-		],
 		"comma-spacing": "error",
 		"comma-style": "error",
 		"curly": [

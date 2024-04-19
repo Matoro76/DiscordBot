@@ -1,6 +1,6 @@
 const { token } = require('./config');
 const setStatus = require('./status');
-const dailyNotify = require('./dailyNotify');
+const { dailyNotify, minuteNotify } = require('./dailyNotify');
 const { refreshCommands } = require('./deploy');
 // eslint-disable-next-line no-unused-vars
 const app = require('./app');
@@ -10,6 +10,7 @@ const client = require('./client');
 client.on('ready', async () => {
   setStatus(client);
   dailyNotify(client);
+  minuteNotify(client);
   await refreshCommands(client);
 });
 
@@ -33,3 +34,4 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.login(token);
+global.client = client;
