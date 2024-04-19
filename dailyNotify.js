@@ -26,21 +26,7 @@ async function dailyNotify(client) {
       timezone: 'Asia/Taipei',
     }
   );
-  console.log('已設定開始執行daily cron job');
-}
-
-async function minuteNotify(client) {
-  cron.schedule(
-    '* * * * *',
-    () => {
-      sendMessage(client);
-    },
-    {
-      scheduled: true,
-      timezone: 'Asia/Taipei',
-    }
-  );
-  console.log('已設定開始執行minute cron job');
+  console.log('Finished setting daily cron job');
 }
 
 function genDailyNotifyMessage() {
@@ -51,4 +37,4 @@ function genDailyNotifyMessage() {
   return dailyNotifyMessage;
 }
 
-module.exports = { dailyNotify, minuteNotify };
+module.exports = { dailyNotify };
