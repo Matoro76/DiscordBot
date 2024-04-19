@@ -6,7 +6,7 @@ const { guildId: GUILD_ID } = require('./config');
  * @param {Array} channelNames
  */
 function findTextChannelByChannelName(client, channelNames) {
-  const guild = getGuildByGuildId(GUILD_ID, client);
+  const guild = getGuildByGuildId(client, GUILD_ID);
   if (guild) {
     for (const ch of guild.channels.cache.values()) {
       if (channelNames.includes(ch.name)) {
@@ -23,7 +23,7 @@ function findTextChannelByChannelName(client, channelNames) {
  * @param {Array} roleName
  */
 function findRoleByRoleName(client, roleNames) {
-  const guild = getGuildByGuildId(GUILD_ID, client);
+  const guild = getGuildByGuildId(client, GUILD_ID);
   if (guild) {
     for (const role of guild.roles.cache.values()) {
       if (roleNames.includes(role.name)) {
